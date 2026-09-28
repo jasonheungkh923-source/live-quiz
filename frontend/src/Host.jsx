@@ -1,8 +1,10 @@
 import React, {useState, useEffect, useRef} from 'react'
-import io from 'socket.io-client'
+import { io } from 'socket.io-client'
 import QRCode from 'qrcode'
 
-const socket = io('http://localhost:4000')
+// backend URL configurable via Vite env var VITE_BACKEND_URL
+const BACKEND = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000'
+const socket = io(BACKEND)
 
 export default function Host(){
   const [questionsText, setQuestionsText] = useState(`[{\n  "text":"首都在哪裡？","choices":["台北","東京","倫敦","紐約"],"answerIndex":0\n},{\n  "text":"2+2=?","choices":["3","4","5","6"],"answerIndex":1\n}]`)
@@ -28,7 +30,8 @@ export default function Host(){
     catch(e){ alert('JSON parse error'); return; }
     socket.emit('host-create-session', {questions}, (res)=>{
       setSessionId(res.sessionId);
-      const url = (location.origin.replace(/:\d+$/,'') || 'http://localhost:5173') + `/join?session=${res.sessionId}`
+      const origin = location.origin.replace(/:\d+$/,'') || 'http://localhost:5173'
+      const url = origin + `/join?session=${res.sessionId}`
       QRCode.toCanvas(qrcodeRef.current, url).catch(console.error)
     })
   }

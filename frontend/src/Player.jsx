@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from 'react'
-import io from 'socket.io-client'
+import { io } from 'socket.io-client'
 
-const socket = io('http://localhost:4000')
+// backend URL configurable via Vite env var VITE_BACKEND_URL
+const BACKEND = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000'
+const socket = io(BACKEND)
 
 export default function Player(){
   const [sessionId, setSessionId] = useState('')
