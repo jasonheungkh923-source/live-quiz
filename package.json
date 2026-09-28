@@ -1,0 +1,8 @@
+{
+  "name": "live-quiz-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install-all": "(cd backend && npm install) && (cd frontend && npm install)"
+  }
+}
